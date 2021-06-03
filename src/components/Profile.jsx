@@ -8,7 +8,6 @@ import { useImmer } from "use-immer";
 import ProfilePosts from "./ProfilePosts";
 import ProfileFollowers from "./ProfileFollowers";
 import ProfileFollowing from "./ProfileFollowing";
-import NotFound from "./NotFound";
 
 function Profile() {
   const { username } = useParams();
@@ -35,13 +34,9 @@ function Profile() {
           { token: appState.user.token },
           { cancelToken: ourRequest.token }
         );
-        if (response.data) {
-          setState((draft) => {
-            draft.profileData = response.data;
-          });
-        } else {
-          <NotFound />;
-        }
+        setState((draft) => {
+          draft.profileData = response.data;
+        });
       } catch (e) {
         console.log(e.response.data);
       }
