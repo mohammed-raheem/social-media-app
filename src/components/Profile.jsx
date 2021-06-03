@@ -8,9 +8,8 @@ import { useImmer } from "use-immer";
 import ProfilePosts from "./ProfilePosts";
 import ProfileFollowers from "./ProfileFollowers";
 import ProfileFollowing from "./ProfileFollowing";
+import NotFound from "./NotFound";
 
-
-//Main function for component
 function Profile() {
   const { username } = useParams();
   const appState = useContext(StateContext);
@@ -26,7 +25,6 @@ function Profile() {
     },
   });
 
-  //Primary useEffect - This is used when the component mounts
   useEffect(() => {
     const ourRequest = Axios.CancelToken.source();
 
@@ -37,9 +35,13 @@ function Profile() {
           { token: appState.user.token },
           { cancelToken: ourRequest.token }
         );
-        setState((draft) => {
-          draft.profileData = response.data;
-        });
+        if (response.data) {
+          setState((draft) => {
+            draft.profileData = response.data;
+          });
+        } else {
+          <NotFound />;
+        }
       } catch (e) {
         console.log(e.response.data);
       }
